@@ -1,4 +1,8 @@
-import Image from 'next/image';
+import { Github, ExternalLink, Code2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Project {
   title: string;
@@ -7,81 +11,110 @@ interface Project {
   technologies: string[];
   githubUrl: string;
   liveUrl: string;
+  featured?: boolean;
 }
 
 const projects: Project[] = [
   {
-    title: "Project 1",
-    description: "A brief description of your first project. Explain what it does and what technologies you used.",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-    githubUrl: "https://github.com/yourusername/project1",
-    liveUrl: "https://project1.com"
+    title: "Modern E-commerce Platform",
+    description: "A full-stack e-commerce platform built with Next.js, featuring real-time inventory management, secure payments, and an intuitive admin dashboard.",
+    technologies: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Stripe"],
+    githubUrl: "https://github.com/yourusername/ecommerce",
+    liveUrl: "https://ecommerce-demo.com",
+    featured: true
   },
-  // Add more projects here
+  {
+    title: "AI-Powered Task Manager",
+    description: "An intelligent task management application that uses AI to prioritize and categorize tasks, with natural language processing for task creation.",
+    technologies: ["React", "Node.js", "OpenAI API", "MongoDB", "Express"],
+    githubUrl: "https://github.com/yourusername/ai-task-manager",
+    liveUrl: "https://ai-task-manager.com",
+    featured: true
+  },
+  {
+    title: "Real-time Chat Application",
+    description: "A modern chat application with real-time messaging, file sharing, and end-to-end encryption.",
+    technologies: ["Socket.io", "React", "Node.js", "MongoDB", "WebRTC"],
+    githubUrl: "https://github.com/yourusername/chat-app",
+    liveUrl: "https://chat-app-demo.com"
+  }
 ];
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section id="projects" className="py-20 bg-gradient-to-b from-background to-muted/20">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          My Projects
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Featured Projects
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            A collection of projects I've built, showcasing my skills in full-stack development,
+            UI/UX design, and problem-solving.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <div
-              key={index}
-              className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <div className="relative h-48 bg-gray-200 dark:bg-gray-700">
-                {project.image ? (
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-6xl text-gray-400 dark:text-gray-500">
-                    🚀
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
+            <Card key={index} className="group hover:shadow-lg transition-all duration-300">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
+                    {project.title}
+                  </CardTitle>
+                  {project.featured && (
+                    <Badge variant="secondary" className="bg-primary/10 text-primary">
+                      Featured
+                    </Badge>
+                  )}
+                </div>
+                <CardDescription className="line-clamp-2">
                   {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="relative h-48 mb-4 rounded-lg overflow-hidden bg-muted">
+                  {project.image ? (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-6xl text-muted-foreground/20">
+                      <Code2 className="w-16 h-16" />
+                    </div>
+                  )}
                 </div>
-                <div className="flex gap-4">
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    GitHub →
+                <ScrollArea className="h-20">
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, techIndex) => (
+                      <Badge
+                        key={techIndex}
+                        variant="outline"
+                        className="bg-secondary/50"
+                      >
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+              <CardFooter className="flex gap-2">
+                <Button variant="outline" size="sm" className="flex-1" asChild>
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Github className="w-4 h-4 mr-2" />
+                    Code
                   </a>
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    Live Demo →
+                </Button>
+                <Button variant="default" size="sm" className="flex-1" asChild>
+                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Live Demo
                   </a>
-                </div>
-              </div>
-            </div>
+                </Button>
+              </CardFooter>
+            </Card>
           ))}
         </div>
       </div>
